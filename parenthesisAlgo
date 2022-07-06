@@ -1,0 +1,39 @@
+const isValid = (s) => {
+  
+  const left_parenthesis = ['(', '{', '['];
+  // 括弧が閉じられているか判定するための比較用文字列
+  const s_replaced = s.split(')').join('(').split('}').join('{').split(']').join('[');
+  let stack = [];
+  let judge = 'true';
+  
+  for (let i = 0; i < s.length; i++) {
+    if (left_parenthesis.includes(s.charAt(i))) {
+      // 閉じられていない左括弧をstackに格納  
+      stack.push(s.charAt(i));
+    }
+    else if (stack.length == 0) {
+      // 閉じられていない左括弧がない状態で右括弧が出現したらfalse
+      judge = 'false';
+    }
+    else if (stack.slice(-1)[0] == s_replaced[i]) {
+      // 左括弧に対応する右括弧ならばstackから取り出す
+      stack.pop();
+    }
+    else {
+      judge = 'false';
+    }
+  }
+  
+  if (stack.length != 0) {
+    // 最終的なstackの長さが0でなければ閉じていない左括弧が存在するのでfalse
+    judge = 'false'; 
+  }
+  
+  return judge;
+};
+
+let s = '()';
+console.log(isValid(s)); // true
+
+s = '({)}'
+console.log(isValid(s)); // false
